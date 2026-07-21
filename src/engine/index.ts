@@ -1,11 +1,10 @@
-import type { CalculatorState } from './types';
-
 export { applyCalculatorAction, enterDecimalPoint, enterDigit } from './entry';
 export {
   calculate,
   evaluatePendingOperation,
   selectOperator,
 } from './operations';
+export { createInitialCalculatorState, initialCalculatorState } from './state';
 export type {
   CalculatorAction,
   CalculationResult,
@@ -14,18 +13,3 @@ export type {
   Digit,
   Operator,
 } from './types';
-
-const baseInitialState: CalculatorState = {
-  currentEntry: '0',
-  storedOperand: null,
-  pendingOperator: null,
-  isResultCommitted: false,
-  error: null,
-};
-
-export const initialCalculatorState: Readonly<CalculatorState> =
-  Object.freeze(baseInitialState);
-
-export function createInitialCalculatorState(): CalculatorState {
-  return { ...baseInitialState };
-}

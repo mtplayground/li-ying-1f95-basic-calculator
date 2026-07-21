@@ -1,5 +1,6 @@
 import type { CalculatorAction, CalculatorState, Digit } from './types';
 import { evaluatePendingOperation, selectOperator } from './operations';
+import { createInitialCalculatorState } from './state';
 
 function resetCommittedResult(state: CalculatorState): CalculatorState {
   if (state.error !== null) {
@@ -89,16 +90,6 @@ export function applyCalculatorAction(
     case 'equals':
       return evaluatePendingOperation(state);
     case 'clear':
-      if (state.error !== null) {
-        return {
-          currentEntry: '0',
-          storedOperand: null,
-          pendingOperator: null,
-          isResultCommitted: false,
-          error: null,
-        };
-      }
-
-      return state;
+      return createInitialCalculatorState();
   }
 }
