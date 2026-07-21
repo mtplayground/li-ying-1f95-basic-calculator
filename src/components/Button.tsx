@@ -9,6 +9,7 @@ export interface ButtonProps extends Omit<
   accessibleLabel: string;
   variant: CalculatorButtonVariant;
   isPressed?: boolean;
+  keyboardShortcut?: string;
   children: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export function Button({
   accessibleLabel,
   variant,
   isPressed = false,
+  keyboardShortcut,
   children,
   className,
   type = 'button',
@@ -31,9 +33,10 @@ export function Button({
     <button
       {...buttonProps}
       aria-label={accessibleLabel}
+      aria-keyshortcuts={keyboardShortcut}
       className={[
         'calculator-button-token min-w-key-size select-none',
-        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-accent',
         'disabled:cursor-not-allowed disabled:opacity-50',
         variantClasses[variant],
         className,
