@@ -51,6 +51,7 @@ describe('calculator entry behavior', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: true,
+      error: null,
     };
 
     expect(enterDigit(committedState, '7')).toEqual({
@@ -58,6 +59,7 @@ describe('calculator entry behavior', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: false,
+      error: null,
     });
   });
 
@@ -67,6 +69,7 @@ describe('calculator entry behavior', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: true,
+      error: null,
     };
 
     expect(enterDecimalPoint(committedState)).toEqual({
@@ -74,6 +77,7 @@ describe('calculator entry behavior', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: false,
+      error: null,
     });
   });
 
@@ -97,6 +101,7 @@ describe('calculator entry behavior', () => {
       storedOperand: 8,
       pendingOperator: 'add',
       isResultCommitted: true,
+      error: null,
     };
 
     expect(enterDigit(pendingState, '3')).toEqual({
@@ -104,6 +109,20 @@ describe('calculator entry behavior', () => {
       storedOperand: 8,
       pendingOperator: 'add',
       isResultCommitted: false,
+      error: null,
     });
+  });
+
+  it('ignores digit and decimal entry while an error is active', () => {
+    const errorState: CalculatorState = {
+      currentEntry: 'Error',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: true,
+      error: 'division-by-zero',
+    };
+
+    expect(enterDigit(errorState, '9')).toBe(errorState);
+    expect(enterDecimalPoint(errorState)).toBe(errorState);
   });
 });

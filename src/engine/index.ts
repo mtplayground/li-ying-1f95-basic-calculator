@@ -8,6 +8,8 @@ export {
 } from './operations';
 export type {
   CalculatorAction,
+  CalculationResult,
+  CalculatorError,
   CalculatorState,
   Digit,
   Operator,
@@ -18,6 +20,7 @@ const baseInitialState: CalculatorState = {
   storedOperand: null,
   pendingOperator: null,
   isResultCommitted: false,
+  error: null,
 };
 
 export const initialCalculatorState: Readonly<CalculatorState> =

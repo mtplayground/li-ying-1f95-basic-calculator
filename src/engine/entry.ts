@@ -2,6 +2,10 @@ import type { CalculatorAction, CalculatorState, Digit } from './types';
 import { evaluatePendingOperation, selectOperator } from './operations';
 
 function resetCommittedResult(state: CalculatorState): CalculatorState {
+  if (state.error !== null) {
+    return state;
+  }
+
   if (!state.isResultCommitted) {
     return state;
   }
@@ -25,6 +29,10 @@ export function enterDigit(
   state: CalculatorState,
   digit: Digit,
 ): CalculatorState {
+  if (state.error !== null) {
+    return state;
+  }
+
   const editableState = resetCommittedResult(state);
   const shouldReplaceEntry =
     state.isResultCommitted || editableState.currentEntry === '0';
@@ -46,6 +54,10 @@ export function enterDigit(
 }
 
 export function enterDecimalPoint(state: CalculatorState): CalculatorState {
+  if (state.error !== null) {
+    return state;
+  }
+
   if (state.isResultCommitted) {
     return {
       ...resetCommittedResult(state),
@@ -77,6 +89,16 @@ export function applyCalculatorAction(
     case 'equals':
       return evaluatePendingOperation(state);
     case 'clear':
+      if (state.error !== null) {
+        return {
+          currentEntry: '0',
+          storedOperand: null,
+          pendingOperator: null,
+          isResultCommitted: false,
+          error: null,
+        };
+      }
+
       return state;
   }
 }
