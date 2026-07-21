@@ -69,6 +69,10 @@
 
   .calculator-button-token {
     @apply grid h-key-size min-h-key-size place-items-center rounded-control border-2 text-keypad tracking-normal;
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease,
+      color 120ms ease;
   }
 
   .calculator-keypad {
@@ -79,11 +83,34 @@
     @apply border-button-digit-border bg-button-digit text-button-digit-text;
   }
 
+  .calculator-button-token--digit:active,
+  .calculator-button-token--digit[data-pressed='true'] {
+    @apply border-surface-border bg-surface-muted text-ink;
+  }
+
   .calculator-button-token--operator {
     @apply border-button-operator-border bg-button-operator text-button-operator-text;
   }
 
+  .calculator-button-token--operator:active,
+  .calculator-button-token--operator[data-pressed='true'] {
+    @apply border-accent bg-accent text-accent-contrast;
+  }
+
   .calculator-button-token--clear {
     @apply border-button-clear-border bg-button-clear text-button-clear-text;
+  }
+
+  .calculator-button-token--clear:active,
+  .calculator-button-token--clear[data-pressed='true'] {
+    @apply border-button-clear-text bg-button-clear-text text-ink-inverse;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    .calculator-button-token {
+      transition: none;
+    }
   }
 }

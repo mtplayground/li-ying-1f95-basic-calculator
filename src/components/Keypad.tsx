@@ -2,6 +2,7 @@ import type { CalculatorAction } from '../engine';
 import { Button, type CalculatorButtonVariant } from './Button';
 
 export interface KeypadProps {
+  activeAction?: CalculatorAction | null;
   onAction?: (action: CalculatorAction) => void;
 }
 
@@ -138,13 +139,46 @@ const keypadButtons: KeypadButtonDefinition[] = [
   },
 ];
 
-export function Keypad({ onAction }: KeypadProps) {
+function actionsMatch(
+  activeAction: CalculatorAction | null | undefined,
+  buttonAction: CalculatorAction,
+): boolean {
+  if (activeAction === null || activeAction === undefined) {
+    return false;
+  }
+
+  if (activeAction.type !== buttonAction.type) {
+    return false;
+  }
+
+  switch (activeAction.type) {
+    case 'digit':
+      return (
+        buttonAction.type === 'digit' &&
+        activeAction.digit === buttonAction.digit
+      );
+    case 'operator':
+      return (
+        buttonAction.type === 'operator' &&
+        activeAction.operator === buttonAction.operator
+      );
+    case 'decimal':
+    case 'equals':
+    case 'clear':
+      return true;
+    case 'backspace':
+      return false;
+  }
+}
+
+export function Keypad({ activeAction, onAction }: KeypadProps) {
   return (
     <section aria-label="Calculator keypad" className="calculator-keypad">
       {keypadButtons.map((key) => (
         <Button
           accessibleLabel={key.accessibleLabel}
           className={key.className}
+          isPressed={actionsMatch(activeAction, key.action)}
           key={key.id}
           onClick={() => onAction?.(key.action)}
           variant={key.variant}

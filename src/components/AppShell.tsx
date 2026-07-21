@@ -4,7 +4,7 @@ import { Display } from './Display';
 import { Keypad } from './Keypad';
 
 export function AppShell() {
-  const { displayValue, dispatch, isError } = useCalculator();
+  const { activeAction, displayValue, dispatch, isError } = useCalculator();
   useKeyboardInput(dispatch);
 
   return (
@@ -17,7 +17,7 @@ export function AppShell() {
           </h1>
         </header>
         <Display isError={isError} value={displayValue} />
-        <Keypad onAction={dispatch} />
+        <Keypad activeAction={activeAction} onAction={dispatch} />
       </section>
     </main>
   );
