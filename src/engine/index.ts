@@ -1,5 +1,6 @@
 import type { CalculatorState } from './types';
 
+export { applyCalculatorAction, enterDecimalPoint, enterDigit } from './entry';
 export type {
   CalculatorAction,
   CalculatorState,
