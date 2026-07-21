@@ -1,9 +1,9 @@
-import { createInitialCalculatorState, formatDisplay } from '../engine';
+import { useCalculator } from '../hooks/useCalculator';
 import { Display } from './Display';
 import { Keypad } from './Keypad';
 
 export function AppShell() {
-  const displayValue = formatDisplay(createInitialCalculatorState());
+  const { displayValue, dispatch, isError } = useCalculator();
 
   return (
     <main className="app-shell bg-canvas text-ink" aria-labelledby="app-title">
@@ -14,8 +14,8 @@ export function AppShell() {
             Basic Calculator
           </h1>
         </header>
-        <Display value={displayValue} />
-        <Keypad />
+        <Display isError={isError} value={displayValue} />
+        <Keypad onAction={dispatch} />
       </section>
     </main>
   );
