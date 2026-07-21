@@ -5,13 +5,17 @@ import {
   enterDecimalPoint,
   enterDigit,
 } from '.';
-import type { CalculatorState } from './types';
+import type { CalculatorAction, CalculatorState, Digit } from './types';
+
+function digit(value: Digit): CalculatorAction {
+  return { type: 'digit', digit: value };
+}
 
 describe('calculator entry behavior', () => {
   it('accumulates consecutive digit entries', () => {
-    const state = ['1', '2', '3'].reduce(
-      (nextState, digit) =>
-        enterDigit(nextState, digit as Parameters<typeof enterDigit>[1]),
+    const digits: Digit[] = ['1', '2', '3'];
+    const state = digits.reduce(
+      (nextState, nextDigit) => enterDigit(nextState, nextDigit),
       createInitialCalculatorState(),
     );
 
@@ -44,8 +48,8 @@ describe('calculator entry behavior', () => {
   it('starts a fresh entry when a digit follows a committed result', () => {
     const committedState: CalculatorState = {
       currentEntry: '42',
-      storedOperand: 42,
-      pendingOperator: 'add',
+      storedOperand: null,
+      pendingOperator: null,
       isResultCommitted: true,
     };
 
@@ -60,8 +64,8 @@ describe('calculator entry behavior', () => {
   it('starts a fresh decimal entry after a committed result', () => {
     const committedState: CalculatorState = {
       currentEntry: '42',
-      storedOperand: 42,
-      pendingOperator: 'multiply',
+      storedOperand: null,
+      pendingOperator: null,
       isResultCommitted: true,
     };
 
@@ -74,19 +78,32 @@ describe('calculator entry behavior', () => {
   });
 
   it('dispatches digit and decimal actions through the engine module', () => {
-    const state = [
-      { type: 'digit', digit: '9' },
+    const actions: CalculatorAction[] = [
+      digit('9'),
       { type: 'decimal' },
-      { type: 'digit', digit: '4' },
-    ].reduce(
-      (nextState, action) =>
-        applyCalculatorAction(
-          nextState,
-          action as Parameters<typeof applyCalculatorAction>[1],
-        ),
+      digit('4'),
+    ];
+    const state = actions.reduce(
+      (nextState, action) => applyCalculatorAction(nextState, action),
       createInitialCalculatorState(),
     );
 
     expect(state.currentEntry).toBe('9.4');
+  });
+
+  it('preserves the pending operation when entering a right operand', () => {
+    const pendingState: CalculatorState = {
+      currentEntry: '8',
+      storedOperand: 8,
+      pendingOperator: 'add',
+      isResultCommitted: true,
+    };
+
+    expect(enterDigit(pendingState, '3')).toEqual({
+      currentEntry: '3',
+      storedOperand: 8,
+      pendingOperator: 'add',
+      isResultCommitted: false,
+    });
   });
 });
