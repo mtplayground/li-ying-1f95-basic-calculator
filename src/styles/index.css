@@ -64,7 +64,7 @@
   }
 
   .calculator-display-token {
-    @apply min-h-display-block border-2 border-surface-border bg-surface px-calc-pad py-5 text-right font-display text-display text-ink;
+    @apply min-h-display-block border-2 border-surface-border bg-surface px-calc-pad py-5 text-right font-display text-ink;
   }
 
   .calculator-button-token {
