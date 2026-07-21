@@ -71,6 +71,10 @@
     @apply grid h-key-size min-h-key-size place-items-center rounded-control border-2 text-keypad tracking-normal;
   }
 
+  .calculator-keypad {
+    @apply grid grid-cols-4 gap-calc-gap;
+  }
+
   .calculator-button-token--digit {
     @apply border-button-digit-border bg-button-digit text-button-digit-text;
   }
