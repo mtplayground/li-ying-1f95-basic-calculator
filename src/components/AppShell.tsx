@@ -1,9 +1,11 @@
 import { useCalculator } from '../hooks/useCalculator';
+import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Display } from './Display';
 import { Keypad } from './Keypad';
 
 export function AppShell() {
   const { displayValue, dispatch, isError } = useCalculator();
+  useKeyboardInput(dispatch);
 
   return (
     <main className="app-shell bg-canvas text-ink" aria-labelledby="app-title">

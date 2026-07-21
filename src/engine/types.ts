@@ -20,4 +20,5 @@ export type CalculatorAction =
   | { type: 'decimal' }
   | { type: 'operator'; operator: Operator }
   | { type: 'equals' }
-  | { type: 'clear' };
+  | { type: 'clear' }
+  | { type: 'backspace' };

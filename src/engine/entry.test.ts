@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   applyCalculatorAction,
   createInitialCalculatorState,
+  deleteLastDigit,
   enterDecimalPoint,
   enterDigit,
 } from '.';
@@ -124,5 +125,60 @@ describe('calculator entry behavior', () => {
 
     expect(enterDigit(errorState, '9')).toBe(errorState);
     expect(enterDecimalPoint(errorState)).toBe(errorState);
+  });
+
+  it('deletes the last active entry character with backspace', () => {
+    const state: CalculatorState = {
+      currentEntry: '123.4',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: false,
+      error: null,
+    };
+
+    expect(deleteLastDigit(state)).toEqual({
+      ...state,
+      currentEntry: '123.',
+    });
+  });
+
+  it('falls back to zero when backspace removes the final digit', () => {
+    const state = enterDigit(createInitialCalculatorState(), '8');
+
+    expect(deleteLastDigit(state)).toEqual(createInitialCalculatorState());
+  });
+
+  it('dispatches backspace through the engine module', () => {
+    const actions: CalculatorAction[] = [
+      digit('4'),
+      digit('2'),
+      { type: 'backspace' },
+    ];
+    const state = actions.reduce(
+      (nextState, action) => applyCalculatorAction(nextState, action),
+      createInitialCalculatorState(),
+    );
+
+    expect(state.currentEntry).toBe('4');
+  });
+
+  it('ignores backspace while an error or committed result is active', () => {
+    const errorState: CalculatorState = {
+      currentEntry: 'Error',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: true,
+      error: 'division-by-zero',
+    };
+    const committedState: CalculatorState = {
+      currentEntry: '42',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: true,
+      error: null,
+    };
+
+    expect(deleteLastDigit(errorState)).toBe(errorState);
+    expect(deleteLastDigit(committedState)).toBe(committedState);
   });
 });

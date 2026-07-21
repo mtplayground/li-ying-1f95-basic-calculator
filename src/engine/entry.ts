@@ -76,6 +76,28 @@ export function enterDecimalPoint(state: CalculatorState): CalculatorState {
   };
 }
 
+export function deleteLastDigit(state: CalculatorState): CalculatorState {
+  if (state.error !== null || state.isResultCommitted) {
+    return state;
+  }
+
+  if (state.currentEntry.length <= 1) {
+    return state.currentEntry === '0' ? state : { ...state, currentEntry: '0' };
+  }
+
+  const nextEntry = state.currentEntry.slice(0, -1);
+  const currentEntry = nextEntry === '' || nextEntry === '-' ? '0' : nextEntry;
+
+  if (currentEntry === state.currentEntry) {
+    return state;
+  }
+
+  return {
+    ...state,
+    currentEntry,
+  };
+}
+
 export function applyCalculatorAction(
   state: CalculatorState,
   action: CalculatorAction,
@@ -91,5 +113,7 @@ export function applyCalculatorAction(
       return evaluatePendingOperation(state);
     case 'clear':
       return createInitialCalculatorState();
+    case 'backspace':
+      return deleteLastDigit(state);
   }
 }
