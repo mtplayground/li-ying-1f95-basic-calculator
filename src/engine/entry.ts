@@ -1,8 +1,16 @@
 import type { CalculatorAction, CalculatorState, Digit } from './types';
+import { evaluatePendingOperation, selectOperator } from './operations';
 
 function resetCommittedResult(state: CalculatorState): CalculatorState {
   if (!state.isResultCommitted) {
     return state;
+  }
+
+  if (state.pendingOperator !== null && state.storedOperand !== null) {
+    return {
+      ...state,
+      isResultCommitted: false,
+    };
   }
 
   return {
@@ -65,7 +73,9 @@ export function applyCalculatorAction(
     case 'decimal':
       return enterDecimalPoint(state);
     case 'operator':
+      return selectOperator(state, action.operator);
     case 'equals':
+      return evaluatePendingOperation(state);
     case 'clear':
       return state;
   }
