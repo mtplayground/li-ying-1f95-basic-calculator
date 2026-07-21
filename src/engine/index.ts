@@ -1,4 +1,5 @@
 export { applyCalculatorAction, enterDecimalPoint, enterDigit } from './entry';
+export { formatDisplay } from './format';
 export {
   calculate,
   evaluatePendingOperation,
