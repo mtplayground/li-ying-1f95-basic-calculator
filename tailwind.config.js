@@ -63,11 +63,11 @@ export default {
       spacing: {
         'calc-gap': '1rem',
         'calc-pad': '1.5rem',
-        'display-block': '7rem',
-        'key-size': '4.5rem',
+        'display-block': '6.5rem',
+        'key-size': '4rem',
       },
       maxWidth: {
-        calculator: '26rem',
+        calculator: '24rem',
       },
       borderRadius: {
         calculator: '0.5rem',
