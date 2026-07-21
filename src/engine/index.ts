@@ -1,4 +1,9 @@
-export { applyCalculatorAction, enterDecimalPoint, enterDigit } from './entry';
+export {
+  applyCalculatorAction,
+  deleteLastDigit,
+  enterDecimalPoint,
+  enterDigit,
+} from './entry';
 export { formatDisplay } from './format';
 export {
   calculate,
