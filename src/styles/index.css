@@ -44,27 +44,27 @@
 
 @layer components {
   .app-shell {
-    @apply grid min-h-screen place-items-center bg-canvas px-6 py-10 text-ink;
+    @apply grid min-h-screen place-items-center bg-canvas px-4 py-6 text-ink sm:px-6 sm:py-10;
   }
 
   .calculator-stage {
-    @apply grid w-full max-w-calculator gap-8;
+    @apply grid w-full max-w-calculator gap-5 rounded-calculator border-2 border-surface-border bg-surface p-4;
   }
 
   .app-header {
-    @apply grid gap-2;
+    @apply grid min-w-0 gap-1;
   }
 
   .app-kicker {
-    @apply m-0 text-sm font-bold uppercase text-accent;
+    @apply m-0 text-xs font-bold uppercase text-accent;
   }
 
   .app-title {
-    @apply m-0 font-display text-display tracking-normal text-ink;
+    @apply m-0 truncate font-display text-2xl font-bold tracking-normal text-ink;
   }
 
   .calculator-display-token {
-    @apply min-h-display-block border-2 border-surface-border bg-surface px-calc-pad py-5 text-right font-display text-ink;
+    @apply min-h-display-block w-full border-2 border-surface-border bg-canvas px-calc-pad py-5 text-right font-display text-ink;
   }
 
   .calculator-button-token {
@@ -76,7 +76,7 @@
   }
 
   .calculator-keypad {
-    @apply grid grid-cols-4 gap-calc-gap;
+    @apply grid w-full grid-cols-4 gap-calc-gap;
   }
 
   .calculator-button-token--digit {
