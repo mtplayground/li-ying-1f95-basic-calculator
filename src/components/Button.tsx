@@ -8,6 +8,7 @@ export interface ButtonProps extends Omit<
 > {
   accessibleLabel: string;
   variant: CalculatorButtonVariant;
+  isPressed?: boolean;
   children: ReactNode;
 }
 
@@ -20,6 +21,7 @@ const variantClasses: Record<CalculatorButtonVariant, string> = {
 export function Button({
   accessibleLabel,
   variant,
+  isPressed = false,
   children,
   className,
   type = 'button',
@@ -38,6 +40,7 @@ export function Button({
       ]
         .filter(Boolean)
         .join(' ')}
+      data-pressed={isPressed ? 'true' : undefined}
       type={type}
     >
       {children}
