@@ -10,6 +10,7 @@ interface KeypadButtonDefinition {
   id: string;
   label: string;
   accessibleLabel: string;
+  keyboardShortcut: string;
   variant: CalculatorButtonVariant;
   action: CalculatorAction;
   className?: string;
@@ -20,6 +21,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'clear',
     label: 'C',
     accessibleLabel: 'Clear',
+    keyboardShortcut: 'Escape',
     variant: 'clear',
     action: { type: 'clear' },
     className: 'col-span-3',
@@ -28,6 +30,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'divide',
     label: '/',
     accessibleLabel: 'Divide',
+    keyboardShortcut: '/',
     variant: 'operator',
     action: { type: 'operator', operator: 'divide' },
   },
@@ -35,6 +38,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'seven',
     label: '7',
     accessibleLabel: 'Seven',
+    keyboardShortcut: '7',
     variant: 'digit',
     action: { type: 'digit', digit: '7' },
   },
@@ -42,6 +46,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'eight',
     label: '8',
     accessibleLabel: 'Eight',
+    keyboardShortcut: '8',
     variant: 'digit',
     action: { type: 'digit', digit: '8' },
   },
@@ -49,6 +54,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'nine',
     label: '9',
     accessibleLabel: 'Nine',
+    keyboardShortcut: '9',
     variant: 'digit',
     action: { type: 'digit', digit: '9' },
   },
@@ -56,6 +62,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'multiply',
     label: '*',
     accessibleLabel: 'Multiply',
+    keyboardShortcut: '*',
     variant: 'operator',
     action: { type: 'operator', operator: 'multiply' },
   },
@@ -63,6 +70,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'four',
     label: '4',
     accessibleLabel: 'Four',
+    keyboardShortcut: '4',
     variant: 'digit',
     action: { type: 'digit', digit: '4' },
   },
@@ -70,6 +78,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'five',
     label: '5',
     accessibleLabel: 'Five',
+    keyboardShortcut: '5',
     variant: 'digit',
     action: { type: 'digit', digit: '5' },
   },
@@ -77,6 +86,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'six',
     label: '6',
     accessibleLabel: 'Six',
+    keyboardShortcut: '6',
     variant: 'digit',
     action: { type: 'digit', digit: '6' },
   },
@@ -84,6 +94,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'subtract',
     label: '-',
     accessibleLabel: 'Subtract',
+    keyboardShortcut: '-',
     variant: 'operator',
     action: { type: 'operator', operator: 'subtract' },
   },
@@ -91,6 +102,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'one',
     label: '1',
     accessibleLabel: 'One',
+    keyboardShortcut: '1',
     variant: 'digit',
     action: { type: 'digit', digit: '1' },
   },
@@ -98,6 +110,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'two',
     label: '2',
     accessibleLabel: 'Two',
+    keyboardShortcut: '2',
     variant: 'digit',
     action: { type: 'digit', digit: '2' },
   },
@@ -105,6 +118,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'three',
     label: '3',
     accessibleLabel: 'Three',
+    keyboardShortcut: '3',
     variant: 'digit',
     action: { type: 'digit', digit: '3' },
   },
@@ -112,6 +126,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'add',
     label: '+',
     accessibleLabel: 'Add',
+    keyboardShortcut: '+',
     variant: 'operator',
     action: { type: 'operator', operator: 'add' },
   },
@@ -119,6 +134,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'zero',
     label: '0',
     accessibleLabel: 'Zero',
+    keyboardShortcut: '0',
     variant: 'digit',
     action: { type: 'digit', digit: '0' },
     className: 'col-span-2',
@@ -127,6 +143,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'decimal',
     label: '.',
     accessibleLabel: 'Decimal point',
+    keyboardShortcut: '.',
     variant: 'digit',
     action: { type: 'decimal' },
   },
@@ -134,6 +151,7 @@ const keypadButtons: KeypadButtonDefinition[] = [
     id: 'equals',
     label: '=',
     accessibleLabel: 'Equals',
+    keyboardShortcut: 'Enter =',
     variant: 'operator',
     action: { type: 'equals' },
   },
@@ -173,19 +191,24 @@ function actionsMatch(
 
 export function Keypad({ activeAction, onAction }: KeypadProps) {
   return (
-    <section aria-label="Calculator keypad" className="calculator-keypad">
+    <div
+      aria-label="Calculator keypad"
+      className="calculator-keypad"
+      role="group"
+    >
       {keypadButtons.map((key) => (
         <Button
           accessibleLabel={key.accessibleLabel}
           className={key.className}
           isPressed={actionsMatch(activeAction, key.action)}
           key={key.id}
+          keyboardShortcut={key.keyboardShortcut}
           onClick={() => onAction?.(key.action)}
           variant={key.variant}
         >
           {key.label}
         </Button>
       ))}
-    </section>
+    </div>
   );
 }

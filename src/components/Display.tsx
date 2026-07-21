@@ -34,6 +34,7 @@ export function Display({
       className="calculator-display-token flex min-w-0 items-end justify-end overflow-hidden rounded-calculator"
     >
       <output
+        aria-atomic="true"
         aria-live="polite"
         className={[
           'block w-full overflow-hidden text-ellipsis whitespace-nowrap text-right',
@@ -41,6 +42,7 @@ export function Display({
           textSize,
           textTone,
         ].join(' ')}
+        role="status"
       >
         {value}
       </output>
