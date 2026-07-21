@@ -1,5 +1,6 @@
 import { createInitialCalculatorState, formatDisplay } from '../engine';
 import { Display } from './Display';
+import { Keypad } from './Keypad';
 
 export function AppShell() {
   const displayValue = formatDisplay(createInitialCalculatorState());
@@ -14,6 +15,7 @@ export function AppShell() {
           </h1>
         </header>
         <Display value={displayValue} />
+        <Keypad />
       </section>
     </main>
   );
