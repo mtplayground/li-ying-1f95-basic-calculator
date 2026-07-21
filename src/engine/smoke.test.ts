@@ -12,6 +12,7 @@ describe('engine unit test runner', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: false,
+      error: null,
     });
   });
 });

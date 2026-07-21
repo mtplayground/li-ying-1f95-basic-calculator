@@ -28,10 +28,10 @@ function runActions(actions: CalculatorAction[]): CalculatorState {
 
 describe('calculator arithmetic operations', () => {
   it('calculates the four arithmetic operations', () => {
-    expect(calculate(8, 4, 'add')).toBe(12);
-    expect(calculate(8, 4, 'subtract')).toBe(4);
-    expect(calculate(8, 4, 'multiply')).toBe(32);
-    expect(calculate(8, 4, 'divide')).toBe(2);
+    expect(calculate(8, 4, 'add')).toEqual({ status: 'ok', value: 12 });
+    expect(calculate(8, 4, 'subtract')).toEqual({ status: 'ok', value: 4 });
+    expect(calculate(8, 4, 'multiply')).toEqual({ status: 'ok', value: 32 });
+    expect(calculate(8, 4, 'divide')).toEqual({ status: 'ok', value: 2 });
   });
 
   it('stores the left operand when an operator is selected', () => {
@@ -42,6 +42,7 @@ describe('calculator arithmetic operations', () => {
       storedOperand: 8,
       pendingOperator: 'add',
       isResultCommitted: true,
+      error: null,
     });
   });
 
@@ -58,6 +59,7 @@ describe('calculator arithmetic operations', () => {
       storedOperand: null,
       pendingOperator: null,
       isResultCommitted: true,
+      error: null,
     });
   });
 
@@ -97,5 +99,50 @@ describe('calculator arithmetic operations', () => {
 
     expect(once.currentEntry).toBe('7');
     expect(twice).toBe(once);
+  });
+
+  it('returns a calculation error instead of Infinity for division by zero', () => {
+    expect(calculate(8, 0, 'divide')).toEqual({
+      status: 'error',
+      error: 'division-by-zero',
+    });
+  });
+
+  it('sets a recoverable error state when dividing by zero', () => {
+    const errorState = runActions([
+      digit('8'),
+      operator('divide'),
+      digit('0'),
+      { type: 'equals' },
+    ]);
+
+    expect(errorState).toEqual({
+      currentEntry: 'Error',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: true,
+      error: 'division-by-zero',
+    });
+
+    expect(applyCalculatorAction(errorState, { type: 'clear' })).toEqual({
+      currentEntry: '0',
+      storedOperand: null,
+      pendingOperator: null,
+      isResultCommitted: false,
+      error: null,
+    });
+  });
+
+  it('normalizes routine decimal arithmetic artifacts', () => {
+    const state = runActions([
+      { type: 'decimal' },
+      digit('1'),
+      operator('add'),
+      { type: 'decimal' },
+      digit('2'),
+      { type: 'equals' },
+    ]);
+
+    expect(state.currentEntry).toBe('0.3');
   });
 });
