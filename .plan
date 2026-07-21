@@ -1,0 +1,56 @@
+Architecture plan for the calculator implementation
+
+Product source
+- Use the product name and branding from the relevant GitHub issue text when implementation begins. Do not introduce an agent name or placeholder brand.
+
+Project shape
+- Issue #1 should create a Vite React + TypeScript app at the repository root.
+- Expected top-level files after scaffolding: package.json, tsconfig files, vite.config.ts, index.html, src/, and public/ if needed.
+- Keep the app static-build friendly for issue #20; no server-specific runtime assumptions are needed for this calculator.
+
+Proposed module structure
+- src/main.tsx: React entry point.
+- src/App.tsx: top-level calculator shell and layout composition.
+- src/styles/index.css: Tailwind imports and global base styles.
+- src/engine/types.ts: shared engine state, action, operator, input, and status types.
+- src/engine/reducer.ts: pure calculator state transition logic.
+- src/engine/format.ts: display formatting, precision handling, and edge-case presentation.
+- src/engine/index.ts: public exports for engine modules.
+- src/hooks/useCalculator.ts: React state hook that wraps the reducer and exposes UI-friendly handlers.
+- src/hooks/useKeyboardInput.ts: global keyboard mapping and lifecycle management.
+- src/components/Display.tsx: display component.
+- src/components/Button.tsx: reusable calculator button.
+- src/components/Keypad.tsx: keypad grid and button definitions.
+- src/components/Calculator.tsx: composed display, keypad, press feedback, and accessibility wiring.
+- src/test/: test utilities and setup files once the unit runner is installed.
+- e2e/: end-to-end tests once browser automation is introduced.
+
+Shared types
+- CalculatorState should represent the current display value, stored accumulator, pending operator, input mode, last operand when needed for repeated equals behavior, and error/status state.
+- CalculatorAction should cover digit input, decimal input, operator input, equals/evaluate, clear/reset, and keyboard/click activation metadata if useful.
+- Operator should be a narrow union for add, subtract, multiply, and divide.
+- Button metadata should be data-driven so keypad layout, labels, aria-labels, keyboard bindings, and visual variants stay consistent.
+
+Issue dependencies
+- #1 is the foundation for all later frontend work.
+- #2 and #4 should follow early so linting, formatting, and tests guide subsequent changes.
+- #3 depends on #1 and should establish Tailwind tokens before components are built.
+- #5 defines the engine contract that #6 through #10 extend.
+- #6 through #10 should be implemented as pure engine behavior first, with unit tests added alongside or immediately after #4.
+- #11 through #13 depend on #3 and can consume stable button/display metadata from the engine/UI types.
+- #14 depends on the engine and components being available.
+- #15 and #16 depend on #14 because keyboard and press feedback should share the same action path as clicks.
+- #17 depends on the interactive UI being mostly complete.
+- #18 depends on the full calculator flow and should verify realistic browser usage.
+- #19 depends on the implemented interaction and styling baseline.
+- #20 is last and should verify a reproducible static production build.
+
+Key design decisions
+- Keep calculator math in pure TypeScript modules with no React dependency; this makes edge cases and operator chaining easy to unit test.
+- Drive the keypad from typed configuration rather than hand-coded repeated JSX.
+- Route click and keyboard input through one action dispatcher so behavior cannot diverge.
+- Treat display formatting as a separate concern from numeric state transitions.
+- Prefer explicit error states for division by zero and invalid numeric operations, then require clear/reset or replacement input behavior to be defined in tests.
+- Use Tailwind design tokens for a minimalist, high-contrast, accessible calculator surface while keeping component styles small and predictable.
+- Add accessibility from the start of component work: semantic buttons, visible focus, aria labels where symbols are ambiguous, and live-region behavior for the display if appropriate.
+- Keep the final deployment as a static Vite build unless an issue explicitly introduces server functionality.
